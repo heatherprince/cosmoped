@@ -2,7 +2,7 @@
 
 CosMOPED=Cosmological MOPED
 
-We apply the Massively Optimized Parameter Estimation and Data compression technique (MOPED, see Heavens, Jimenez & Lahav 2000 https://arxiv.org/abs/astro-ph/9911102) to the public *Planck* 2015 temperature likelihood, reducing the dimensions of the data space to one number per parameter of interest. Stay tuned for an update that includes the *Planck* 2018 data.
+We apply the Massively Optimized Parameter Estimation and Data compression technique (MOPED, see Heavens, Jimenez & Lahav 2000 https://arxiv.org/abs/astro-ph/9911102) to the public *Planck* 2015 temperature likelihood (https://www.aanda.org/articles/aa/abs/2016/10/aa26926-15/aa26926-15.html), reducing the dimensions of the data space to one number per parameter of interest. Stay tuned for an update that includes the *Planck* 2018 data.
 
 # required packages
 
