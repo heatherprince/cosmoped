@@ -102,9 +102,9 @@ def get_compression_vectors_for_binned_data(theta_fid, params, with_low_ell):
     returns compression vectors to be applied to planck binned power spectrum
     """
     class_param_dict=get_class_dict(theta_fid)
-    print(class_param_dict)
+    #print(class_param_dict)
     dtheta_frac=get_dtheta_frac(theta_fid, params)
-    print('dtheta_frac', dtheta_frac)
+    #print('dtheta_frac', dtheta_frac)
 
     fisher=cmb_angular_power_spectrum.get_inverse_covmat_TT(with_low_ell)
     betas={}  #this will be the dictionary of weighting vectors
@@ -118,6 +118,7 @@ def get_compression_vectors_for_binned_data(theta_fid, params, with_low_ell):
 
         num=fisher.dot(dCl)
         denom_sq=dCl.dot(fisher.dot(dCl))
+
         if i==0:
             betas[param]=num/np.sqrt(denom_sq)
 
@@ -189,10 +190,6 @@ def get_dtheta_frac(theta_dict, param_list):
 
 
 if __name__=='__main__':
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    # will be in unittest code, just trying some stuff first
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #LambdaCDM_shift_fiducial_h
-    ini_filename='../inifiles/LambdaCDM.ini' #'../input_datafiles/LambdaCDM.ini' #'../input_datafiles/LambdaCDMplusNeff.ini' #
+    ini_filename='../inifiles/LambdaCDM.ini'
     create_and_save_compression_data(ini_filename, with_low_ell=True)
     create_and_save_compression_data(ini_filename, with_low_ell=False)

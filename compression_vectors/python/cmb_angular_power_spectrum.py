@@ -24,11 +24,8 @@ nbin_low_ell=2
 lmin_low_ell=[2, 16]
 lmax_low_ell=[15, 29]
 
-#update to new format
-low_ell_filename='../cmb_data/planck2015_plik_lite/'
+low_ell_filename='../cmb_data/planck2015_low_ell/low_ell_bins.dat'  #update to new format
 data_dir='../cmb_data/planck2015_plik_lite/'
-
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Binning
@@ -257,7 +254,7 @@ def get_inverse_covmat_TT(with_low_ell):
         inv_covmat_with_lo=np.zeros(shape=(bin_no, bin_no))
         bin_no=nbintt+2
         b_lo, C_lo_TT, dC_lo_TT=get_planck_TT_binned_power_spec_low_ell()
-        print('dC_lo_TT', dC_lo_TT)
+        #print('dC_lo_TT', dC_lo_TT)
         inv_covmat_with_lo[0:2, 0:2]=np.diag(1./dC_lo_TT**2)
         inv_covmat_with_lo[2:,2:]= fisher
         fisher=inv_covmat_with_lo
@@ -307,29 +304,29 @@ if __name__=='__main__':
     plt.xscale('log')
     plt.show()
 
-    # get Planck 2015 all ell binned power spectrum
-    b_planck, C_planck, dC_planck=get_planck_TT_binned_power_spec(with_low_ell=True)
-    D_fac_all_ell=b_planck*(b_planck+1)/(2*np.pi)
-    # get theoretical binned power spectrum
-    ell_bin, Cltt_bin=get_theoretical_TT_binned_power_spec(params, with_low_ell=True)
-    # plot
-    plt.errorbar(b_planck, D_fac_all_ell*C_planck, yerr=D_fac_all_ell*dC_planck, linestyle='none', marker='+', label='binned planck2015')
-    plt.scatter(ell_bin, ell_bin*(ell_bin+1)/(2*np.pi)*Cltt_bin, s=30, c='black', marker='x', label='binned theory')
-    plt.legend()
-    plt.xscale('log')
-    plt.show()
-
-    fisher_high_ell=get_inverse_covmat_TT(with_low_ell=False)
-    fisher=get_inverse_covmat_TT(with_low_ell=True)
-    plt.pcolormesh(fisher)
-    plt.colorbar()
-    plt.show()
-
-    plt.pcolormesh(fisher_high_ell-fisher[2:,2:])
-    plt.colorbar()
-    plt.show()
-
-    param='h'
-    ell, dCdtheta=get_numerical_derivative_of_C_l_TT(params, param, with_low_ell=True, frac=0.01)
-    plt.plot(ell, ell*(ell+1)/(2*np.pi)*dCdtheta, label='derivative wrt h')
-    plt.show()
+    # # get Planck 2015 all ell binned power spectrum
+    # b_planck, C_planck, dC_planck=get_planck_TT_binned_power_spec(with_low_ell=True)
+    # D_fac_all_ell=b_planck*(b_planck+1)/(2*np.pi)
+    # # get theoretical binned power spectrum
+    # ell_bin, Cltt_bin=get_theoretical_TT_binned_power_spec(params, with_low_ell=True)
+    # # plot
+    # plt.errorbar(b_planck, D_fac_all_ell*C_planck, yerr=D_fac_all_ell*dC_planck, linestyle='none', marker='+', label='binned planck2015')
+    # plt.scatter(ell_bin, ell_bin*(ell_bin+1)/(2*np.pi)*Cltt_bin, s=30, c='black', marker='x', label='binned theory')
+    # plt.legend()
+    # plt.xscale('log')
+    # plt.show()
+    #
+    # fisher_high_ell=get_inverse_covmat_TT(with_low_ell=False)
+    # fisher=get_inverse_covmat_TT(with_low_ell=True)
+    # plt.pcolormesh(fisher)
+    # plt.colorbar()
+    # plt.show()
+    #
+    # plt.pcolormesh(fisher_high_ell-fisher[2:,2:])
+    # plt.colorbar()
+    # plt.show()
+    #
+    # param='h'
+    # ell, dCdtheta=get_numerical_derivative_of_C_l_TT(params, param, with_low_ell=True, frac=0.01)
+    # plt.plot(ell, ell*(ell+1)/(2*np.pi)*dCdtheta, label='derivative wrt h')
+    # plt.show()

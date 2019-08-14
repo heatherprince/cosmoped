@@ -1,6 +1,6 @@
 import numpy as np
 
-def read_file(ini_filename='../input_datafiles/LambdaCDM.ini'):
+def read_file(ini_filename='../inifiles/LambdaCDM.ini'):
     f = open(ini_filename, 'r+')
     ini_data = [line.strip().split() for line in f.readlines()
                 if not (line.startswith('#') or line.startswith('\n'))]
@@ -36,10 +36,6 @@ def read_file(ini_filename='../input_datafiles/LambdaCDM.ini'):
 
 if __name__=='__main__':
     param_dict, param_names=read_file()
-    print('The weighting vectors to create in the order they will be created:')
+    print('The weighting vectors to create in the order they will be created, with fiducial values:')
     for n in param_names:
-        print(n, param_dict[n])
-
-    print('The fiducial parameters to be used are:')
-    for n in param_dict:
         print(n, param_dict[n])
