@@ -82,11 +82,9 @@ class SampleCosMOPED():
         size=[p/1e6 for p in pos0]
         self.pos=emcee.utils.sample_ball(pos0, size, size=nwalkers)
 
-        self.burnin = int(ini_dict['burnin'])
         # total number of steps
+        self.burnin = int(ini_dict['burnin'])
         self.nsteps = int(ini_dict['nsteps'])
-        # pause to incrementally save output after taking this number of steps
-        self.nsteps_incremental_write = int(ini_dict['nsteps_incremental_write'])
 
         # to test timing of logprob:
         self.pos0=list(start_vals.values())
@@ -145,19 +143,20 @@ class SampleCosMOPED():
 
     def sample_incremental_save_emceev2(self):
         pos=self.pos
-        if self.burnin>0:
-            print('starting ', self.burnin, ' burnin steps')
-            start = time.time()
-            pos, prob, state  = self.sampler.run_mcmc(pos, self.burnin)
-            self.sampler.reset()
-            end=time.time()
-            print('burnin time: %f' %(end-start))
+        # if self.burnin>0:
+        #     print('starting ', self.burnin, ' burnin steps')
+        #     start = time.time()
+        #     pos, prob, state  = self.sampler.run_mcmc(pos, self.burnin)
+        #     self.sampler.reset()
+        #     end=time.time()
+        #     print('burnin time: %f' %(end-start))
 
         print('starting mcmc sampling')
-        nloops=int(np.ceil(self.nsteps/self.nsteps_incremental_write))
+        nloops=2
+        nsteps_incremental_write=int(np.ceil(self.nsteps/nloops))
         for i in range(0, nloops):
             start = time.time()
-            pos, prob, state=self.sampler.run_mcmc(pos, self.nsteps_incremental_write)
+            pos, prob, state=self.sampler.run_mcmc(pos, nsteps_incremental_write)
             end = time.time()
             print('emcee sampling took ', (end-start), 'seconds for ', self.nsteps, ' steps in loop ', i)
             # save
