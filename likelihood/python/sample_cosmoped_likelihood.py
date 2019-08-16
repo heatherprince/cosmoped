@@ -85,6 +85,7 @@ class SampleCosMOPED():
         # total number of steps
         self.burnin = int(ini_dict['burnin'])
         self.nsteps = int(ini_dict['nsteps'])
+        self.nsteps_check_autocorr = int(ini_dict['nsteps_check_autocorr'])
 
         # to test timing of logprob:
         self.pos0=list(start_vals.values())
@@ -106,7 +107,7 @@ class SampleCosMOPED():
         # Now we'll sample for up to max_n steps
         for sample in self.sampler.sample(self.pos, iterations=max_n, store=True, progress=True):
             # Only check convergence every 100 steps
-            if self.sampler.iteration % 100:
+            if self.sampler.iteration % self.nsteps_check_autocorr:
                 continue
             # Compute the autocorrelation time so far
             # Using tol=0 means that we'll always get an estimate even
@@ -115,11 +116,17 @@ class SampleCosMOPED():
             autocorr[index] = np.mean(tau)
             index += 1
             # Check convergence
-            converged = np.all(tau * 100 < self.sampler.iteration)
+            converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
             converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
             if converged:
                 break
             old_tau = tau
+
+        n = self.nsteps_check_autocorr*np.arange(1, index+1)
+        y = autocorr[:index]
+
+        np.savetxt(self.save_dir+'autocorrelation_'+np.column_stack(n, y))
+
 
     def hdf5_to_textfile(self):
         filename = self.save_dir+self.save_file_prefix+'.h5'
