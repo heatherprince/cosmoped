@@ -1,8 +1,11 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import h5py
 # HDF5 groups are like python dictionaries, datasets are like numpy arrays
 # https://www.pythonforthelab.com/blog/how-to-use-hdf5-files-in-python/#basic-saving-and-reading-data
 
-def read_chains(filename='../chains/LCDM_all_ell.h5')
+def read_chains(filename='../chains/LCDM_all_ell.h5'):
     with h5py.File(filename, 'r') as f:
         print(list(f.keys()))
         print(list(f['mcmc'].keys()))
@@ -19,7 +22,7 @@ def get_median_and_errors(self):
     err_minus=ps[1]-ps[0]
     return median, err_plus, err_minus
 
-def walker_plot(chain, params, extra_burnin_steps=0, theta_true=None, save_as_dir="../plots/", save_as_name="walkers.png"):
+def walker_plot(samples, params, extra_burnin_steps=0, theta_true=None, save_as_dir="../plots/", save_as_name="walkers.png"):
     #makes a walker plot and histogram
     #burnin_steps here means how many steps we discard when showing our plots. It doesn't have to match the burnin_steps argument to run
     #check theta_true!!

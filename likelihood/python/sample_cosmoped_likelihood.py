@@ -123,9 +123,9 @@ class SampleCosMOPED():
             old_tau = tau
 
         n = self.nsteps_check_autocorr*np.arange(1, index+1)
-        y = autocorr[:index]
+        acor = autocorr[:index]
 
-        np.savetxt(self.save_dir+'autocorrelation_'+np.column_stack(n, y))
+        np.savetxt(self.save_dir+'autocorrelation_'+np.column_stack((n, acor)))
 
 
     def hdf5_to_textfile(self):
