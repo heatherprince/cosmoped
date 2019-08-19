@@ -64,15 +64,15 @@ class SampleCosMOPED():
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists
-        # filename = self.save_dir+self.save_file_prefix+'.h5'
-        # backend = emcee.backends.HDFBackend(filename)
-        # backend.reset(nwalkers, ndim)
+        filename = self.save_dir+self.save_file_prefix+'.h5'
+        backend = emcee.backends.HDFBackend(filename)
+        backend.reset(nwalkers, ndim)
 
         class_obj = Class()
         self.sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob_fn,
             args=(params_to_sample, prior_bounds, prior_gaussian, class_obj,
-                  class_basic_dict, compression_vectors, compressed_data))#,
-            # backend=backend)
+                  class_basic_dict, compression_vectors, compressed_data)),
+            backend=backend)
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         # things for running emcee - - - - - - - - - - - - - - - - - - - - - -
@@ -111,7 +111,7 @@ class SampleCosMOPED():
 
         for i in range(0, nloops):
             start = time.time()
-            pos, prob, state = self.sampler.run_mcmc(pos, self.nsteps_check_autocorr) #try with backend if this works
+            pos, prob, state = self.sampler.run_mcmc(pos, self.nsteps_check_autocorr, store=True) #try with backend if this works
             end = time.time()
             print('emcee sampling took ', (end-start), 'seconds for ', self.nsteps_check_autocorr, ' steps in loop ', i)
             np.savetxt(self.save_dir+'flatchain.dat', self.sampler.flatchain)
@@ -120,7 +120,7 @@ class SampleCosMOPED():
             tau = self.sampler.get_autocorr_time(tol=0)
             autocorr[i] = np.mean(tau)
             f=open(self.save_dir+'autocorrelation.dat','ab')
-            np.savetxt(f, np.array([(i+1)*self.nsteps_check_autocorr, autocorr[i]]))
+            np.savetxt(f, np.array(i[[(i+1)*self.nsteps_check_autocorr, autocorr[i]]]))
             f.close()
 
             converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
@@ -152,7 +152,7 @@ class SampleCosMOPED():
         #     old_tau = tau
 
         n = self.nsteps_check_autocorr*np.arange(1, i+1)
-        acor = autocorr[:i]
+        acor = autocorr[:i+1]
 
         np.savetxt(self.save_dir+'autocorrelation_end.dat',+np.column_stack((n, acor)))
 
