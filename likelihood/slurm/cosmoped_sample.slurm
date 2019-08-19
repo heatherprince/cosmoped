@@ -8,6 +8,6 @@
 #SBATCH --mail-type=end
 #SBATCH --mail-user=heatherp@princeton.edu
 echo "about to load anaconda3"
-module load anaconda
+module load anaconda3
 echo "about to run sample cosmoped"
 python ../python/sample_cosmoped_likelihood.py
