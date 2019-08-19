@@ -71,8 +71,7 @@ class SampleCosMOPED():
         class_obj = Class()
         self.sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob_fn,
             args=(params_to_sample, prior_bounds, prior_gaussian, class_obj,
-                  class_basic_dict, compression_vectors, compressed_data)),
-            backend=backend)
+                  class_basic_dict, compression_vectors, compressed_data), backend=backend)
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         # things for running emcee - - - - - - - - - - - - - - - - - - - - - -
