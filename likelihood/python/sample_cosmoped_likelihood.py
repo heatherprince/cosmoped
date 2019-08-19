@@ -99,16 +99,16 @@ class SampleCosMOPED():
 
     def sample(self):
         pos=self.pos
-        # from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-        max_n = self.nsteps
-        # We'll track how the average autocorrelation time estimate changes
-        index = 0
-        autocorr = np.empty(max_n)
+        # autocorrelation stuff from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+
         # This will be useful to testing convergence
         old_tau = np.inf
-        # Now we'll sample for up to max_n steps
 
         nloops=int(np.ceil(self.nsteps/self.nsteps_check_autocorr))
+
+        # We'll track how the average autocorrelation time estimate changes
+        autocorr = np.empty(nloops)
+
         for i in range(0, nloops):
             start = time.time()
             pos, prob, state = self.sampler.run_mcmc(pos, self.nsteps_check_autocorr) #try with backend if this works
@@ -118,8 +118,10 @@ class SampleCosMOPED():
             np.savetxt(self.save_dir+'lnprob.dat', self.sampler.flatlnprobability)
 
             tau = self.sampler.get_autocorr_time(tol=0)
-            autocorr[index] = np.mean(tau)
-            index += 1
+            autocorr[i] = np.mean(tau)
+            f=open(self.save_dir+'flatchain.dat','ab')
+            np.savetxt(f, np.array([(i+1)*self.nsteps_check_autocorr, autocorr[i]]))
+            f.close()
 
             converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
             converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
@@ -149,7 +151,7 @@ class SampleCosMOPED():
         #         break
         #     old_tau = tau
 
-        n = self.nsteps_check_autocorr*np.arange(1, index+1)
+        n = self.nsteps_check_autocorr*np.arange(1, i+1)
         acor = autocorr[:index]
 
         np.savetxt(self.save_dir+'autocorrelation_'+np.column_stack((n, acor)))
