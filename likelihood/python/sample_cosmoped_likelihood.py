@@ -106,25 +106,47 @@ class SampleCosMOPED():
         # This will be useful to testing convergence
         old_tau = np.inf
         # Now we'll sample for up to max_n steps
-        for sample in self.sampler.sample(self.pos, iterations=max_n, store=True, progress=True):
-            # Only check convergence every 100 steps
-            if self.sampler.iteration % self.nsteps_check_autocorr:
-                continue
-            # Compute the autocorrelation time so far
-            # Using tol=0 means that we'll always get an estimate even
-            # if it isn't trustworthy
+
+        nloops=int(np.ceil(self.nsteps/self.nsteps_check_autocorr))
+        for i in range(0, nloops):
+            start = time.time()
+            pos, prob, state = self.sampler.run_mcmc(pos, self.nsteps_check_autocorr) #try with backend if this works
+            end = time.time()
+            print('emcee sampling took ', (end-start), 'seconds for ', self.nsteps_check_autocorr, ' steps in loop ', i)
             np.savetxt(self.save_dir+'flatchain.dat', self.sampler.flatchain)
             np.savetxt(self.save_dir+'lnprob.dat', self.sampler.flatlnprobability)
 
             tau = self.sampler.get_autocorr_time(tol=0)
             autocorr[index] = np.mean(tau)
             index += 1
-            # Check convergence
+
             converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
             converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
             if converged:
                 break
             old_tau = tau
+
+
+
+        # for sample in self.sampler.sample(self.pos, iterations=max_n, store=True, progress=True): #giving memory issues?
+        #     # Only check convergence every 100 steps
+        #     if self.sampler.iteration % self.nsteps_check_autocorr:
+        #         continue
+        #     # Compute the autocorrelation time so far
+        #     # Using tol=0 means that we'll always get an estimate even
+        #     # if it isn't trustworthy
+        #     np.savetxt(self.save_dir+'flatchain.dat', self.sampler.flatchain)
+        #     np.savetxt(self.save_dir+'lnprob.dat', self.sampler.flatlnprobability)
+        #
+        #     tau = self.sampler.get_autocorr_time(tol=0)
+        #     autocorr[index] = np.mean(tau)
+        #     index += 1
+        #     # Check convergence
+        #     converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
+        #     converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
+        #     if converged:
+        #         break
+        #     old_tau = tau
 
         n = self.nsteps_check_autocorr*np.arange(1, index+1)
         acor = autocorr[:index]
