@@ -98,6 +98,16 @@ class SampleCosMOPED():
 
     def sample(self):
         pos=self.pos
+
+        if self.burnin>0:
+            print('starting ', self.burnin, ' burnin steps')
+            start = time.time()
+            pos, prob, state  = self.sampler.run_mcmc(pos, self.burnin, store=False)
+            self.sampler.reset()
+            end=time.time()
+            print('burnin time: %f' %(end-start))
+
+
         # autocorrelation stuff from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
 
         # This will be useful to testing convergence
@@ -149,11 +159,11 @@ class SampleCosMOPED():
         #     if converged:
         #         break
         #     old_tau = tau
-
-        n = self.nsteps_check_autocorr*np.arange(1, i+1)
-        acor = autocorr[:i+1]
-
-        np.savetxt(self.save_dir+'autocorrelation_end.dat',+np.column_stack((n, acor)))
+        #
+        # n = self.nsteps_check_autocorr*np.arange(1, i+1)
+        # acor = autocorr[:i+1]
+        #
+        # np.savetxt(self.save_dir+'autocorrelation_end.dat',+np.column_stack((n, acor)))
 
 
     def hdf5_to_textfile(self):
