@@ -98,6 +98,7 @@ class SampleCosMOPED():
         class_obj.empty()
 
     def sample(self):
+        pos=self.pos
         # from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
         max_n = self.nsteps
         # We'll track how the average autocorrelation time estimate changes
