@@ -119,7 +119,7 @@ class SampleCosMOPED():
 
             tau = self.sampler.get_autocorr_time(tol=0)
             autocorr[i] = np.mean(tau)
-            f=open(self.save_dir+'flatchain.dat','ab')
+            f=open(self.save_dir+'autocorrelation.dat','ab')
             np.savetxt(f, np.array([(i+1)*self.nsteps_check_autocorr, autocorr[i]]))
             f.close()
 
@@ -152,9 +152,9 @@ class SampleCosMOPED():
         #     old_tau = tau
 
         n = self.nsteps_check_autocorr*np.arange(1, i+1)
-        acor = autocorr[:index]
+        acor = autocorr[:i]
 
-        np.savetxt(self.save_dir+'autocorrelation_'+np.column_stack((n, acor)))
+        np.savetxt(self.save_dir+'autocorrelation_end.dat',+np.column_stack((n, acor)))
 
 
     def hdf5_to_textfile(self):
