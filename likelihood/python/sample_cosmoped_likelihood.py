@@ -64,15 +64,15 @@ class SampleCosMOPED():
 
         # Set up the backend
         # Don't forget to clear it in case the file already exists
-        filename = self.save_dir+self.save_file_prefix+'.h5'
-        backend = emcee.backends.HDFBackend(filename)
-        backend.reset(nwalkers, ndim)
+        # filename = self.save_dir+self.save_file_prefix+'.h5'
+        # backend = emcee.backends.HDFBackend(filename)
+        # backend.reset(nwalkers, ndim)
 
         class_obj = Class()
         self.sampler = emcee.EnsembleSampler(nwalkers, ndim, logprob_fn,
             args=(params_to_sample, prior_bounds, prior_gaussian, class_obj,
-                  class_basic_dict, compression_vectors, compressed_data),
-            backend=backend)
+                  class_basic_dict, compression_vectors, compressed_data))#,
+            # backend=backend)
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         # things for running emcee - - - - - - - - - - - - - - - - - - - - - -
@@ -83,6 +83,7 @@ class SampleCosMOPED():
         self.pos=emcee.utils.sample_ball(pos0, size, size=nwalkers)
 
         # total number of steps
+        self.saveas = self.save_dir+self.save_file_prefix+'.dat'
         self.burnin = int(ini_dict['burnin'])
         self.nsteps = int(ini_dict['nsteps'])
         self.nsteps_check_autocorr = int(ini_dict['nsteps_check_autocorr'])
@@ -112,6 +113,9 @@ class SampleCosMOPED():
             # Compute the autocorrelation time so far
             # Using tol=0 means that we'll always get an estimate even
             # if it isn't trustworthy
+            np.savetxt(self.save_dir+'flatchain.dat', self.sampler.flatchain)
+            np.savetxt(self.save_dir+'lnprob.dat', self.sampler.flatlnprobability)
+
             tau = self.sampler.get_autocorr_time(tol=0)
             autocorr[index] = np.mean(tau)
             index += 1
@@ -168,10 +172,10 @@ class SampleCosMOPED():
             print('emcee sampling took ', (end-start), 'seconds for ', self.nsteps, ' steps in loop ', i)
             # save
             f=open(self.save_dir+'flatchain.dat','ab')
-            np.savetxt(f, sampler.flatchain)
+            np.savetxt(f, self.sampler.flatchain)
             f.close()
             f=open(self.save_dir+'lnprob.dat','ab')
-            np.savetxt(f, sampler.flatlnprobability)
+            np.savetxt(f, self.sampler.flatlnprobability)
             f.close()
             np.savetxt(self.save_dir+'pos_after_'+str((i+1)*nsteps)+'_steps.dat', pos)
 
@@ -188,4 +192,4 @@ if __name__=='__main__':
     sampling_object=SampleCosMOPED('../inifiles/sample_compressed_LCDM.ini')
     sampling_object.time_likelihood()
     sampling_object.sample()
-    sampling_object.hdf5_to_textfile()
+    #sampling_object.hdf5_to_textfile()
