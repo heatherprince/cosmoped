@@ -119,7 +119,7 @@ class SampleCosMOPED():
             tau = self.sampler.get_autocorr_time(tol=0)
             autocorr[i] = np.mean(tau)
             f=open(self.save_dir+'autocorrelation.dat','ab')
-            np.savetxt(f, np.array(i[[(i+1)*self.nsteps_check_autocorr, autocorr[i]]]))
+            np.savetxt(f, np.array([[(i+1)*self.nsteps_check_autocorr, autocorr[i]]]))
             f.close()
 
             converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
