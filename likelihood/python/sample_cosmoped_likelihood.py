@@ -107,16 +107,11 @@ class SampleCosMOPED():
             end=time.time()
             print('burnin time: %f' %(end-start))
 
-
-        # autocorrelation stuff from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
-
-        # This will be useful to testing convergence
-        old_tau = np.inf
-
         nloops=int(np.ceil(self.nsteps/self.nsteps_check_autocorr))
 
-        # We'll track how the average autocorrelation time estimate changes
+        # autocorrelation stuff from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
         autocorr = np.empty(nloops)
+        old_tau = np.inf
 
         for i in range(0, nloops):
             start = time.time()
@@ -139,33 +134,6 @@ class SampleCosMOPED():
             old_tau = tau
 
 
-
-        # for sample in self.sampler.sample(self.pos, iterations=max_n, store=True, progress=True): #giving memory issues?
-        #     # Only check convergence every 100 steps
-        #     if self.sampler.iteration % self.nsteps_check_autocorr:
-        #         continue
-        #     # Compute the autocorrelation time so far
-        #     # Using tol=0 means that we'll always get an estimate even
-        #     # if it isn't trustworthy
-        #     np.savetxt(self.save_dir+'flatchain.dat', self.sampler.flatchain)
-        #     np.savetxt(self.save_dir+'lnprob.dat', self.sampler.flatlnprobability)
-        #
-        #     tau = self.sampler.get_autocorr_time(tol=0)
-        #     autocorr[index] = np.mean(tau)
-        #     index += 1
-        #     # Check convergence
-        #     converged = np.all(tau * self.nsteps_check_autocorr < self.sampler.iteration)
-        #     converged &= np.all(np.abs(old_tau - tau) / tau < 0.01)
-        #     if converged:
-        #         break
-        #     old_tau = tau
-        #
-        # n = self.nsteps_check_autocorr*np.arange(1, i+1)
-        # acor = autocorr[:i+1]
-        #
-        # np.savetxt(self.save_dir+'autocorrelation_end.dat',+np.column_stack((n, acor)))
-
-
     def hdf5_to_textfile(self):
         filename = self.save_dir+self.save_file_prefix+'.h5'
         reader = emcee.backends.HDFBackend(filename)
@@ -186,43 +154,8 @@ class SampleCosMOPED():
         end=time.time()
         print('total time for one likelihood call=', end-start)
 
-    def sample_incremental_save_emceev2(self):
-        pos=self.pos
-        # if self.burnin>0:
-        #     print('starting ', self.burnin, ' burnin steps')
-        #     start = time.time()
-        #     pos, prob, state  = self.sampler.run_mcmc(pos, self.burnin)
-        #     self.sampler.reset()
-        #     end=time.time()
-        #     print('burnin time: %f' %(end-start))
-
-        print('starting mcmc sampling')
-        nloops=2
-        nsteps_incremental_write=int(np.ceil(self.nsteps/nloops))
-        for i in range(0, nloops):
-            start = time.time()
-            pos, prob, state=self.sampler.run_mcmc(pos, nsteps_incremental_write)
-            end = time.time()
-            print('emcee sampling took ', (end-start), 'seconds for ', self.nsteps, ' steps in loop ', i)
-            # save
-            f=open(self.save_dir+'flatchain.dat','ab')
-            np.savetxt(f, self.sampler.flatchain)
-            f.close()
-            f=open(self.save_dir+'lnprob.dat','ab')
-            np.savetxt(f, self.sampler.flatlnprobability)
-            f.close()
-            np.savetxt(self.save_dir+'pos_after_'+str((i+1)*nsteps)+'_steps.dat', pos)
-
-        tau = sampler.get_autocorr_time(tol=0)
-        np.savetxt(self.savedir+'autocorr.dat', tau)
-
-
 
 if __name__=='__main__':
-    # read command line argument for inifile name
-    # initialise everything
-    # sample
-
     sampling_object=SampleCosMOPED('../inifiles/sample_compressed_LCDM.ini')
     sampling_object.time_likelihood()
     sampling_object.sample()
