@@ -122,6 +122,16 @@ def parameter_plot(chain_list, params, extra_burnin=0, theta_true=None, save_dir
     plt.close()
 
 
+def autocorrelation_plot(autocorr_datafile='../chains/autocorrelation.dat'):
+    # autocorrelation stuff from https://emcee.readthedocs.io/en/latest/tutorials/monitor/
+    n, y = np.loadtxt(autocorr_datafile, unpack=True)
+    plt.plot(n, n / 100.0, "--k")
+    plt.plot(n, y)
+    plt.xlabel("number of steps")
+    plt.ylabel(r"mean $\hat{\tau}$")
+    plt.show()
+
+
 if __name__=='__main__':
     chain, logprob = read_chains(filename='../chains/LCDM_all_ell.h5')
     #params=['h', 'omega_b', 'omega_cdm', 'tau_reio', 'A_s', 'n_s']
@@ -129,3 +139,4 @@ if __name__=='__main__':
     walker_plot(chain, params, extra_burnin=0)
     triangle_plot(chain, params, extra_burnin=0)
     parameter_plot([chain], params, extra_burnin=0)
+    autocorrelation_plot()
