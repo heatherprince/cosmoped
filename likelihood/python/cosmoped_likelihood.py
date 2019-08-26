@@ -1,4 +1,5 @@
 import numpy as np
+from classy import Class
 
 def loglike(cl_theory, compression_vectors, compressed_data):
     #compress cl and compute gaussian chi square
@@ -39,7 +40,7 @@ def logprior(values, names, prior_bound_dict, prior_gaussian_dict):
     return log_prior_val
 
 
-def logprob(values, names, prior_bound_dict, prior_gaussian_dict, class_obj, class_param_dict,  compression_vectors, compressed_data):
+def logprob(values, names, prior_bound_dict, prior_gaussian_dict, class_param_dict,  compression_vectors, compressed_data):
     '''
     values - an array the length of names (things that are varying)
     names - a list of parameter names in the same order as theta_p
@@ -60,16 +61,20 @@ def logprob(values, names, prior_bound_dict, prior_gaussian_dict, class_obj, cla
     for i, n in enumerate(names):
         thetas[n]=values[i]
     #print('dictionary for CLASS', thetas)
-    cl_theory=get_cl_theory(class_obj, thetas)
+    cl_theory=get_cl_theory(thetas)
 
     ll = loglike(cl_theory, compression_vectors, compressed_data)
 
     #combine likelihood and priors
     return lp + ll
 
-def get_cl_theory(class_obj, thetas, ellmin=2, ellmax=2508, T_cmb=2.7255):
+def get_cl_theory(thetas, ellmin=2, ellmax=2508, T_cmb=2.7255):
+    class_obj = Class()
     class_obj.set(thetas)
     class_obj.compute()
     cls = class_obj.lensed_cl(3000)
+    class_obj.struct_cleanup()
+    class_obj.empty()
+
     fac=(T_cmb*1e6)**2
     return (fac*cls['tt'])[ellmin:ellmax+1]
