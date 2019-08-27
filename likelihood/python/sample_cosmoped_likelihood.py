@@ -154,7 +154,5 @@ class SampleCosMOPED():
 if __name__=='__main__':
     sampling_object=SampleCosMOPED('../inifiles/sample_compressed_LCDM.ini')
     sampling_object.time_likelihood()
-    sampling_object.time_likelihood()
-    sampling_object.time_likelihood()
-    # sampling_object.sample()
+    sampling_object.sample()
     # sampling_object.hdf5_to_textfile()

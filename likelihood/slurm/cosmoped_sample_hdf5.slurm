@@ -2,7 +2,7 @@
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=20
-#SBATCH --time=23:00:00
+#SBATCH --time=60:00:00
 
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
