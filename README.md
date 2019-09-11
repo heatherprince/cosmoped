@@ -6,9 +6,8 @@ We apply the Massively Optimized Parameter Estimation and Data compression techn
 
 # required packages
 
-In addition to numpy, scipy and matplotlib you will need
-* [CLASS](http://class-code.net/) and its [python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper)
-* [emcee](https://emcee.readthedocs.io/en/latest/user/install/) if you want to use the sampling code (version 3 up recommended to use hdf5 backend)
+* numpy
+* scipy
 
 # please cite
 
