@@ -480,22 +480,11 @@ class CosmopedVectors:
         bin_w=self.bin_w
 
         if with_low_ell_TT:
-            #need to include binning for two low ell bins: average in Dl = l(l+1) weighting in C
-            # ell_lo=np.arange(ellmin, self.plmin) #2-30
-            # D_fac=ell_lo*(ell_lo+1)
-            # compression_vec_low_ell=D_fac.astype(np.float64)
-            #
-            # ell_0=np.arange(lmin_low_ell[0],lmax_low_ell[0]+1)
-            # ell_1=np.arange(lmin_low_ell[1],lmax_low_ell[1]+1)
-            # D_0_fac=np.sum(ell_0*(ell_0+1))
-            # D_1_fac=np.sum(ell_1*(ell_1+1))
-            # norm_low_ell=[D_0_fac, D_1_fac]
             compression_vec_low_ell=self.bin_w_low_ell.copy()
             for i in range(self.nbintt_lo):
                 compression_vec_low_ell[self.blmin_low_ell[i]:self.blmax_low_ell[i]+1] *=binned_compression_vec[i] / self.calPlanck**2
 
             nbin_lo=self.nbintt_lo
-
 
         else:
             nbin_lo=0
