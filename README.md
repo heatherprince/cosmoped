@@ -9,6 +9,10 @@ We apply the Massively Optimized Parameter Estimation and Data compression techn
 * numpy
 * scipy
 
+# usage
+
+coming soon
+
 # please cite
 
 [*Planck* 2018 likelihood paper](https://arxiv.org/abs/1907.12875) or [*Planck* 2015 likelihood paper](https://www.aanda.org/articles/aa/abs/2016/10/aa26926-15/aa26926-15.html) ([arXiv version](https://arxiv.org/abs/1507.02704)) depending on which data you use, because we use datafiles from the *Planck* plik-lite public likelihood code
