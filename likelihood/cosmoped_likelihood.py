@@ -1,16 +1,19 @@
 import numpy as np
 
 def main():
-    path='../compression_vectors/output/testing/' #get from inifile
+    path='../compression_vectors/output/testing_5percent/' #get from inifile
     #path='../compression_vectors/output/from_old_code/'
     # cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=False)
     # cosmoped.test()
+    cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=False)
+    cosmoped.test()
+
     cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=True)
     cosmoped.test()
 
-    #
-    # cosmoped=CosMOPED(path, year=2015, spectra='TTTEEE', use_low_ell_TT=False)
-    # cosmoped.test()
+    cosmoped=CosMOPED(path, year=2015, spectra='TTTEEE', use_low_ell_TT=True)
+    cosmoped.test()
+
 
 class CosMOPED():
     def __init__(self, path, year=2015, spectra='TT', use_low_ell_TT=False):
