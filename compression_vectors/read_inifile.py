@@ -27,10 +27,10 @@ def read_settings_file(filename):
 
     year=int(dict['year'])
     compression_inifile=dict['compression_inifile']
-    # data_dir=dict['data_dir']
-    # save_dir=dict['save_dir']
+    data_dir=dict['data_dir']
+    save_dir=dict['save_dir']
 
-    return year, compression_inifile#, data_dir, save_dir
+    return year, compression_inifile, data_dir, save_dir
 
 def read_compression_file(ini_filename='../inifiles/LambdaCDM.ini'):
     f = open(ini_filename, 'r+')

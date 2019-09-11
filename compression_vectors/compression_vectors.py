@@ -20,19 +20,22 @@ def main():
         print('$ python compression_vectors.py path/to/inifile.ini')
         sys.exit(1)
 
-    #read from inifile??
-    year, compression_inifile = read_inifile.read_settings_file(settings_inifile)
+    #read from inifile
+    year, compression_inifile, data_dir, save_dir = read_inifile.read_settings_file(settings_inifile)
 
-    compression_obj = CosmopedVectors(compression_inifile, year)
+    compression_obj = CosmopedVectors(compression_inifile, data_dir, save_dir, year)
     derivatives = compression_obj.get_C_derivative()
-
     compression_obj.create_and_save_all_compression_vectors()
     compression_obj.compress_and_save_planck_data_all_combos()
 
 
 class CosmopedVectors:
-    def __init__(self, compression_inifile, year=2018):
-        self.save_dir='output/testing_pt5sig/' #'output/testing_5percent/'#
+    def __init__(self, compression_inifile, data_dir, save_dir, year=2018):
+        self.save_dir=save_dir
+        if not os.path.exists(self.save_dir):
+            os.mkdir(self.save_dir)
+        shutil.copy2(compression_inifile, self.save_dir)
+
         self.year=year
         self.param_dict, self.ordered_param_names=read_inifile.read_compression_file(compression_inifile)
 
@@ -55,8 +58,8 @@ class CosmopedVectors:
             version=18
         elif year==2018:
             version=22
-        self.data_dir='data/planck'+str(year)+'_plik_lite/'
-        self.data_dir_low_ell='data/planck'+str(year)+'_low_ell/'
+        self.data_dir=data_dir+'/planck'+str(year)+'_plik_lite/'
+        self.data_dir_low_ell=data_dir+'/planck'+str(year)+'_low_ell/'
 
         self.cmb_file=self.data_dir+'cl_cmb_plik_v'+str(version)+'.dat'
         self.cov_file=self.data_dir+'c_matrix_plik_v'+str(version)+'.dat'
@@ -168,6 +171,7 @@ class CosmopedVectors:
         dtheta_diff = self.get_dtheta_diff()
         dCdtheta_dict_full = {}
         for param in params:
+            print('computing numerical derivative of C with respect to '+param)
             theta_plus = self.class_dict.copy()
             theta_plus[param] += dtheta_diff[param]
             ell, C_plus = self.get_theoretical_TTTEEE_binned_power_spec(theta_plus, with_low_ell=True)
@@ -186,7 +190,7 @@ class CosmopedVectors:
 
             # 5 point numerical derivative
             dCdtheta_dict_full[param]= (-C_2plus+8*C_plus-8*C_minus+C_2minus)/(12*dtheta_diff[param])
-            np.savetxt(self.save_dir+param+'_derivative_5pt.dat', dCdtheta_dict_full[param])
+            #np.savetxt(self.save_dir+'/'+param+'_derivative_5pt.dat', dCdtheta_dict_full[param])
 
         self.dCdtheta_dict_full=dCdtheta_dict_full
         return dCdtheta_dict_full
@@ -201,16 +205,18 @@ class CosmopedVectors:
         dtheta_diff={}
         for p in self.ordered_param_names:
             try:
-                print('setting h=0.5 sigma')
-                dtheta_diff[p]=0.5*errors_LCDM_planck2015[p]
+                print(p+': setting h=0.1 sigma for numerical derivative')
+                dtheta_diff[p]=0.1*errors_LCDM_planck2015[p]
                 # print('setting h=5% of parameter')
                 # dtheta_diff[p]=0.05*theta_dict[p]
             except:
                 print('I do not have the error for this parameter:', p, 'using default')
                 if theta_dict[p]==0:
+                    print(p+': setting h=0.01 for numerical derivative')
                     dtheta_diff[p]=0.01
                 else:
-                    dtheta_diff[p]=0.001*theta_dict[p]
+                    print(p+': setting h=1% of fiducial parameter for numerical derivative')
+                    dtheta_diff[p]=0.01*theta_dict[p]
         return dtheta_diff
 
     def get_theoretical_TT_TE_EE_unbinned_power_spec_D_ell(self, class_dict):
@@ -325,12 +331,14 @@ class CosmopedVectors:
 
     def create_and_save_all_compression_vectors(self):
         # save compression vectors for unbinned data to use for data compression (in object)
+        print('creating and saving compression vectors from derivatives')
         self.compression_vectors_binned_data_TT_hi=self.create_and_save_compression_vectors(spectra='TT', with_low_ell_TT=False, name_extra='TT_high_ell')
         self.compression_vectors_binned_data_TT_all=self.create_and_save_compression_vectors(spectra='TT', with_low_ell_TT=True, name_extra='TT_all_ell')
         self.compression_vectors_binned_data_TTTEEE_hi=self.create_and_save_compression_vectors(spectra='TTTEEE', with_low_ell_TT=False, name_extra='TTTEEE_high_ell')
         self.compression_vectors_binned_data_TT_all_TEEE_hi=self.create_and_save_compression_vectors(spectra='TTTEEE', with_low_ell_TT=True, name_extra='TT_all_TEEE_high_ell')
 
     def compress_and_save_planck_data_all_combos(self):
+        print('compressing and saving Planck '+str(self.year)+' data')
         self.compress_and_save_planck_data(spectra='TT', with_low_ell_TT=False, name_extra='TT_high_ell')
         self.compress_and_save_planck_data(spectra='TT',with_low_ell_TT=True, name_extra='TT_all_ell')
         self.compress_and_save_planck_data(spectra='TTTEEE', with_low_ell_TT=False, name_extra='TTTEEE_high_ell')
@@ -346,8 +354,8 @@ class CosmopedVectors:
 
         # save to file
         for p in compression_vecs_binned_data:
-            np.savetxt(self.save_dir+p+'_compression_and_binning_vector_'+str(self.year)+'_'+name_extra+'.dat', compression_vecs_unbinned_data[p])
-            np.savetxt(self.save_dir+p+'_compression_vector_'+str(self.year)+'_'+name_extra+'.dat', compression_vecs_binned_data[p])
+            np.savetxt(self.save_dir+'/'+p+'_compression_and_binning_vector_'+str(self.year)+'_'+name_extra+'.dat', compression_vecs_unbinned_data[p])
+            np.savetxt(self.save_dir+'/'+p+'_compression_vector_'+str(self.year)+'_'+name_extra+'.dat', compression_vecs_binned_data[p])
 
         return compression_vecs_binned_data
 
@@ -374,7 +382,7 @@ class CosmopedVectors:
         # save in an appropriately named datafile
         # save to object
         compressed_planck_data={}
-        f = open(self.save_dir+'compressed_planck_data_'+str(self.year)+'_'+name_extra+'.dat', 'w')
+        f = open(self.save_dir+'/compressed_planck_data_'+str(self.year)+'_'+name_extra+'.dat', 'w')
         f.write('# compressed planck data \n')
         for p in compression_vecs:
             compressed_planck_data[p]=compression_vecs[p].dot(Cl_data)
