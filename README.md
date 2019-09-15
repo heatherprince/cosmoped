@@ -18,13 +18,14 @@ Additional requirement for creating compression vectors:
 ## Likelihood
 The CosMOPED compression vectors for the &Lambda;CDM parameters (h, omega_b, omega_cdm, tau_reio, A_s, n_s) already exist in compression_vectors/output, so to get the log likelihood for these you can don't need to make any new compression vectors.
 
-NB: the naming conventions for parameters are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub> h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub> h<sup>2</sup>
+NB: the naming conventions for parameters are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup>
 
 ```python
 # import the CosMOPED class
 from cosmoped_likelihood import CosMOPED
 
-# initialize a CosMOPED object, specifying the path to the compression vectors and which data you want to use (year, spectra and whether or not to use two low-ell temperature bins
+# initialize a CosMOPED object, specifying the path to the compression vectors (depends on model parameters)
+# and which data you want to use (year, spectra and whether or not to use two low-ell temperature bins
 TT2018=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
 
 # call the likelihood function with your theoretical TT, TE, and EE  spectra (from e.g. CLASS or CAMB)
