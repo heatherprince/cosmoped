@@ -25,6 +25,7 @@ from cosmoped_likelihood import CosMOPED
 
 2. initialize a CosMOPED object, specifying the path to the compression vectors, and which data you want to use (year, spectra and whether or not to use two low-ell temperature bins)
 ```python
+path='../compression_vectors/output/LambdaCDM/'
 TT2018_LambdaCDM=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
 ```
 
