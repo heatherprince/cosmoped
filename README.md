@@ -28,12 +28,10 @@ TT2018_LambdaCDM=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
 loglike=TT2018_LambdaCDM.loglike(Dltt, Dlte, Dlee, ellmin)
 ```
 
-
-
-
 When initializing the CosMOPED object you can specify:
 * path: to CosMOPED compression vectors for the parameters you are interested in
   * The CosMOPED compression vectors for the &Lambda;CDM parameters (h, omega_b, omega_cdm, tau_reio, A_s, n_s) already exist in compression_vectors/output, so to get the log likelihood for these you can don't need to make any new compression vectors.
+  * note omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> (CLASS python wrapper naming conventions)
 
 * year: 2015 or 2018 to use the *Planck* 2015 or 2018 data releases
 * spectra: 'TT' for just temperature, or 'TTTEEE' for TT, TE and EE spectra
@@ -46,9 +44,15 @@ Notes on the CosMOPED log likelihood function:
 
 ## Compression vectors
 
-NB: the naming conventions for parameters are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup>
+If you want to create compression vectors for a different cosmological model you can do this by running
 
+```bash
+python compression_vectors.py inifiles/settings.ini
+```
 
+where the settings.ini inifile points to the appropriate compression_inifile which specifies which parameters to calculate compression vectors for and what their fiducial values should be.
+
+NB: the naming conventions for parameters in the compression inifile are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> etc
 
 
 # Please cite
