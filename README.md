@@ -11,7 +11,7 @@ To use the loglikelihood function:
 * scipy
 
 Additional requirement for creating compression vectors:
-* [CLASS] (http://class-code.net/) and its [Python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper)
+* [CLASS](http://class-code.net/) and its [Python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper)
 
 # usage
 
