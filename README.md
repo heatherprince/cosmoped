@@ -17,6 +17,18 @@ Additional requirement for creating compression vectors:
 
 # Usage
 
+## Compression vectors
+
+If you want to create compression vectors for a different cosmological model you can do this by running
+
+```bash
+python compression_vectors.py inifiles/settings.ini
+```
+
+where the settings.ini inifile points to the appropriate compression_inifile which specifies which parameters to calculate compression vectors for and what their fiducial values should be.
+
+NB: the naming conventions for parameters in the compression inifile are the same as for the [CLASS python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> etc
+
 ## Likelihood
 1. import the CosMOPED class
 ```python
@@ -48,17 +60,7 @@ Note:
 * Dltt, Dlte and Dlee should all cover the same l range, usually from a minimum l value of 0 or 2
 * ellmin=2 by default; if your spectra start at l=0 then specify this with ellmin=0
 
-## Compression vectors
 
-If you want to create compression vectors for a different cosmological model you can do this by running
-
-```bash
-python compression_vectors.py inifiles/settings.ini
-```
-
-where the settings.ini inifile points to the appropriate compression_inifile which specifies which parameters to calculate compression vectors for and what their fiducial values should be.
-
-NB: the naming conventions for parameters in the compression inifile are the same as for the [CLASS python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> etc
 
 
 # Please cite
