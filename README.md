@@ -4,7 +4,7 @@ CosMOPED=Cosmological MOPED
 
 We apply the Massively Optimized Parameter Estimation and Data compression technique (MOPED, see [Heavens, Jimenez & Lahav, 2000](https://arxiv.org/abs/astro-ph/9911102) to the public [*Planck* 2015](https://arxiv.org/abs/1507.02704) temperature likelihood, and the [*Planck* 2018](https://arxiv.org/abs/1907.12875) temperature and polarization likelihoods, reducing the dimensions of the data space to one number per parameter of interest.
 
-This means that to compute the likelihood for the LambdaCDM model you only need 6 compression vectors (one for each parameter) and 6 numbers (from compressing the *Planck* data using the 6 compression vectos). Using these, the likelihood of a theory power spectrum given the *Planck* data is just the product of 6 1-dimensional Gaussians. For more details on how this works see our paper.
+This means that to compute the likelihood for the LambdaCDM model you only need 6 compression vectors (one for each parameter) and 6 numbers (from compressing the *Planck* data using the 6 compression vectors). Using these, the likelihood of a theory power spectrum given the *Planck* data is just the product of 6 1-dimensional Gaussians. For more details on how this works see our paper.
 
 # Required packages
 
