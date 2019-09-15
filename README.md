@@ -19,7 +19,7 @@ Additional requirement for creating compression vectors:
 
 # Usage
 
-For a quick start example see likelihood/cosmoped_likelihood_example.py
+For a quick start example see cosmoped_likelihood_example.py
 
 ## Compression vectors
 The Lambda CDM compression vectors are pre-computed so if that's what you want then skip straight to the likelihood section.
