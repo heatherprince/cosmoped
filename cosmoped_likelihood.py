@@ -1,7 +1,7 @@
 import numpy as np
 
 def main():
-    path='../compression_vectors/output/LambdaCDM/'
+    path='compression_vectors/output/LambdaCDM/'
 
     cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_bins=False)
     cosmoped.test()
@@ -19,6 +19,7 @@ def main():
 class CosMOPED():
     def __init__(self, path, year=2015, spectra='TT', use_low_ell_bins=False):
         '''
+        path=path to CosMOPED compression vectors
         year = 2015 or 2018
         spectra = TT or TTTEEE
         use_low_ell_bins = True or False (refers to low-ell temperature bins)
@@ -93,41 +94,41 @@ class CosMOPED():
 
 
     def test(self):
-        ls, Dltt, Dlte, Dlee = np.genfromtxt('data/Dl_planck2015fit.dat', unpack=True) #
+        ls, Dltt, Dlte, Dlee = np.genfromtxt('Dl_planck2015fit.dat', unpack=True) #
         ellmin=int(ls[0])
         loglikelihood=self.loglike(Dltt, Dlte, Dlee, ellmin)
 
         if self.year==2018 and self.spectra=='TTTEEE' and not self.use_low_ell_TT:
             print('Log likelihood for 2018 high-l TT, TE and EE:')
-            expected = -2.5868658874251165
+            expected = -2.876602069898067
             # Plik-lite within cobaya gives  -291.33481235418003
         elif self.year==2018 and self.spectra=='TTTEEE' and self.use_low_ell_TT:
             print('Log likelihood for 2018 high-l TT, TE and EE + low-l TT bins:')
-            expected = -1.8387773388883524
+            expected = -1.9204015349888748
         elif self.year==2018 and self.spectra=='TT' and not self.use_low_ell_TT:
             print('Log likelihood for 2018 high-l TT:')
-            expected = -1.5023874283037404
+            expected = -1.8016026266667178
             #Plik-lite within cobaya gives -101.58123068722568
         elif self.year==2018 and self.spectra=='TT' and self.use_low_ell_TT:
             print('Log likelihood for 2018 high-l TT + low-l TT bins:')
-            expected = -0.5706133078524285
+            expected = -0.6743391516960595
 
         elif self.year==2015 and self.spectra=='TTTEEE' and not self.use_low_ell_TT:
             print('NB: Don\'t use 2015 polarization!')
             print('Log likelihood for 2015 high-l TT, TE and EE:')
-            expected = -1.8458664773183278
+            expected = -2.091187786185083
             # Plik-lite within cobaya gives  -291.33481235418003
         elif self.year==2015 and self.spectra=='TTTEEE' and self.use_low_ell_TT:
             print('NB: Don\'t use 2015 polarization!')
             print('Log likelihood for 2015 high-l TT, TE and EE + low-l TT bins:')
-            expected = -0.7553597338188957
+            expected = -0.7834749438271728
         elif self.year==2015 and self.spectra=='TT' and not self.use_low_ell_TT:
             print('Log likelihood for 2015 high-l TT:')
-            expected = -1.8371310848272433
+            expected = -2.1510870410464618
             #Plik-lite within cobaya gives -101.58123068722568
         elif self.year==2015 and self.spectra=='TT' and self.use_low_ell_TT:
             print('Log likelihood for 2015 high-l TT + low-l TT bins:')
-            expected = -0.6506949795545585
+            expected = -0.7602311677874024
         else:
             expected=None
 
