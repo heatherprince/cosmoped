@@ -1,17 +1,18 @@
 import numpy as np
 
 def main():
-    path='../compression_vectors/output/testing_5percent/' #get from inifile
-    #path='../compression_vectors/output/from_old_code/'
-    # cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=False)
-    # cosmoped.test()
-    cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=False)
+    path='../compression_vectors/output/LambdaCDM/'
+
+    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
     cosmoped.test()
 
-    cosmoped=CosMOPED(path, year=2015, spectra='TT', use_low_ell_TT=True)
+    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=True)
     cosmoped.test()
 
-    cosmoped=CosMOPED(path, year=2015, spectra='TTTEEE', use_low_ell_TT=True)
+    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_TT=False)
+    cosmoped.test()
+
+    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_TT=True)
     cosmoped.test()
 
 
@@ -92,10 +93,53 @@ class CosMOPED():
 
 
     def test(self):
-        ls, Dltt, Dlte, Dlee = np.genfromtxt('data/Dl_LCDM2015.dat', unpack=True) #
+        ls, Dltt, Dlte, Dlee = np.genfromtxt('data/Dl_planck2015fit.dat', unpack=True) #
         ellmin=int(ls[0])
+        loglikelihood=self.loglike(Dltt, Dlte, Dlee, ellmin)
+
+        if self.year==2018 and self.spectra=='TTTEEE' and not self.use_low_ell_TT:
+            print('Log likelihood for 2018 high-l TT, TE and EE:')
+            expected = -2.5868658874251165
+            # Plik-lite within cobaya gives  -291.33481235418003
+        elif self.year==2018 and self.spectra=='TTTEEE' and self.use_low_ell_TT:
+            print('Log likelihood for 2018 high-l TT, TE and EE + low-l TT bins:')
+            expected = -1.8387773388883524
+        elif self.year==2018 and self.spectra=='TT' and not self.use_low_ell_TT:
+            print('Log likelihood for 2018 high-l TT:')
+            expected = -1.5023874283037404
+            #Plik-lite within cobaya gives -101.58123068722568
+        elif self.year==2018 and self.spectra=='TT' and self.use_low_ell_TT:
+            print('Log likelihood for 2018 high-l TT + low-l TT bins:')
+            expected = -0.5706133078524285
+
+        elif self.year==2015 and self.spectra=='TTTEEE' and not self.use_low_ell_TT:
+            print('NB: Don\'t use 2015 polarization!')
+            print('Log likelihood for 2015 high-l TT, TE and EE:')
+            expected = -1.8458664773183278
+            # Plik-lite within cobaya gives  -291.33481235418003
+        elif self.year==2015 and self.spectra=='TTTEEE' and self.use_low_ell_TT:
+            print('NB: Don\'t use 2015 polarization!')
+            print('Log likelihood for 2015 high-l TT, TE and EE + low-l TT bins:')
+            expected = -0.7553597338188957
+        elif self.year==2015 and self.spectra=='TT' and not self.use_low_ell_TT:
+            print('Log likelihood for 2015 high-l TT:')
+            expected = -1.8371310848272433
+            #Plik-lite within cobaya gives -101.58123068722568
+        elif self.year==2015 and self.spectra=='TT' and self.use_low_ell_TT:
+            print('Log likelihood for 2015 high-l TT + low-l TT bins:')
+            expected = -0.6506949795545585
+        else:
+            expected=None
+
+
         print('Year='+str(self.year)+', spectra='+self.spectra+', use low ell TT='+str(self.use_low_ell_TT))
-        print('cosmoped log-likelihood:',self.loglike(Dltt, Dlte, Dlee, ellmin))
+        print('- - - - - - - - - - - - - - - - - - - - - - -')
+        print('CosMOPED log likelihood:',loglikelihood)
+        if(expected):
+            print('Expected log likelihood:', expected)
+            print('Difference:', loglikelihood-expected)
+
+        print('- - - - - - - - - - - - - - - - - - - - - - -\n')
 
 
 
