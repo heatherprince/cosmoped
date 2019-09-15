@@ -52,7 +52,7 @@ python compression_vectors.py inifiles/settings.ini
 
 where the settings.ini inifile points to the appropriate compression_inifile which specifies which parameters to calculate compression vectors for and what their fiducial values should be.
 
-NB: the naming conventions for parameters in the compression inifile are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> etc
+NB: the naming conventions for parameters in the compression inifile are the same as for the [CLASS python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> etc
 
 
 # Please cite
