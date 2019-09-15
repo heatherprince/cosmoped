@@ -23,19 +23,19 @@ Additional requirement for creating compression vectors:
 from cosmoped_likelihood import CosMOPED
 ```
 
-2. initialize a CosMOPED object, specifying the path to the compression vectors, and which data you want to use (year, spectra and whether or not to use two low-ell temperature bins)
+2. initialize a CosMOPED object, specifying
+* path: to CosMOPED compression vectors for the parameters you are interested in
+* year: 2015 or 2018 to use the *Planck* 2015 or 2018 data releases
+* spectra: 'TT' for just temperature, or 'TTTEEE' for TT, TE and EE spectra
+* use_low_ell: True to use two low-l temperature bins, False to use just l>=30 data
 ```python
 path='../compression_vectors/output/LambdaCDM/'
 TT2018_LambdaCDM=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
 ```
 
-When initializing the CosMOPED object you can specify:
-* path: to CosMOPED compression vectors for the parameters you are interested in
-  * The CosMOPED compression vectors for the &Lambda;CDM parameters (h, omega_b, omega_cdm, tau_reio, A_s, n_s) already exist in compression_vectors/output, so to get the log likelihood for these you can don't need to make any new compression vectors.
-  * note omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> (CLASS python wrapper naming conventions)
-* year: 2015 or 2018 to use the *Planck* 2015 or 2018 data releases
-* spectra: 'TT' for just temperature, or 'TTTEEE' for TT, TE and EE spectra
-* use_low_ell: True to use two low-l temperature bins, False to use just l>=30 data
+A note on compression vectors:
+* The CosMOPED compression vectors for the &Lambda;CDM parameters (h, omega_b, omega_cdm, tau_reio, A_s, n_s) already exist in compression_vectors/output, so to get the log likelihood for these you can don't need to make any new compression vectors.
+* note omega_b = &Omega;<sub>b</sub>h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub>h<sup>2</sup> (CLASS python wrapper naming conventions)
 
 
 
