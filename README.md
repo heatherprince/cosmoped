@@ -6,12 +6,18 @@ We apply the Massively Optimized Parameter Estimation and Data compression techn
 
 # required packages
 
+To use the loglikelihood function:
 * numpy
 * scipy
 
+Additional requirement for creating compression vectors:
+* [CLASS] (http://class-code.net/) and its [Python wrapper](https://github.com/lesgourg/class_public/wiki/Python-wrapper)
+
 # usage
 
-coming soon
+The CosMOPED compression vectors for the &Lambda;CDM parameters (h, omega_b, omega_cdm, tau_reio, A_s, n_s) already exist in compression_vectors/output, so to get the log likelihood for these you can don't need to make any new compression vectors.
+
+NB: the naming conventions for parameters are the same as for the CLASS python wrapper (https://github.com/lesgourg/class_public/wiki/Python-wrapper), so omega_b = &Omega;<sub>b</sub> h<sup>2</sup> and omega_cdm = &Omega;<sub>CDM</sub> h<sup>2</sup>
 
 # please cite
 
