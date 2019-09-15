@@ -20,7 +20,7 @@ path='../compression_vectors/output/LambdaCDM/'
 print('Test 1: high-l (l>=30) temperature only (TT)')
 print('- - - - - - - - - - - - - - - - - - - - - -')
 # create a CosMOPED object
-TT2018=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
+TT2018=CosMOPED(path, year=2018, spectra='TT', use_low_ell_bins=False)
 # call the likelihood function
 loglike=TT2018.loglike(Dltt, Dlte, Dlee, ellmin) #ellmin = 2 by default
 expected=-1.8016026266667178
@@ -31,7 +31,7 @@ print('Difference:', loglike-expected, '\n\n')
 print('Test 2: high-l TT, TE and EE data + low-l TT bins')
 print('- - - - - - - - - - - - - - - - - - - - - - - - - ')
 # create a CosMOPED object
-TTTEEE2018_lowTTbins=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_TT=True)
+TTTEEE2018_lowTTbins=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_bins=True)
 
 # call the likelihood function
 loglike=TTTEEE2018_lowTTbins.loglike(Dltt, Dlte, Dlee, ellmin) #ellmin = 2 by default

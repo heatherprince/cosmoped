@@ -3,21 +3,21 @@ import numpy as np
 def main():
     path='../compression_vectors/output/LambdaCDM/'
 
-    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
+    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_bins=False)
     cosmoped.test()
 
-    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=True)
+    cosmoped=CosMOPED(path, year=2018, spectra='TT', use_low_ell_bins=True)
     cosmoped.test()
 
-    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_TT=False)
+    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_bins=False)
     cosmoped.test()
 
-    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_TT=True)
+    cosmoped=CosMOPED(path, year=2018, spectra='TTTEEE', use_low_ell_bins=True)
     cosmoped.test()
 
 
 class CosMOPED():
-    def __init__(self, path, year=2015, spectra='TT', use_low_ell_TT=False):
+    def __init__(self, path, year=2015, spectra='TT', use_low_ell_bins=False):
         '''
         year = 2015 or 2018
         spectra = TT or TTTEEE
@@ -25,7 +25,7 @@ class CosMOPED():
         '''
         self.year=year
         self.spectra=spectra
-        self.use_low_ell_TT=use_low_ell_TT
+        self.use_low_ell_TT=use_low_ell_bins
 
         # read in compression vectors and compressed data
         self.compression_vector_dict, self.compressed_data_dict = self.read_compression_vectors_and_compressed_data(path)
