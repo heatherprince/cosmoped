@@ -30,7 +30,7 @@ from cosmoped_likelihood import CosMOPED
 * use_low_ell: True to use two low-l temperature bins, False to use just l>=30 data
 ```python
 path='../compression_vectors/output/LambdaCDM/'
-TT2018_LambdaCDM=CosMOPED(path, year=2018, spectra='TT', use_low_ell_TT=False)
+TT2018_LambdaCDM=CosMOPED(path, year=2018, spectra='TT', use_low_ell_bins=False)
 ```
 
 A note on compression vectors:
