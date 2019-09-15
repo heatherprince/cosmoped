@@ -1,4 +1,4 @@
-# CosMOPED: A compressed Planck likelihood
+# CosMOPED: a compressed Planck likelihood
 
 CosMOPED=Cosmological MOPED
 
