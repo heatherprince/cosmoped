@@ -197,16 +197,21 @@ class CosmopedVectors:
 
 
     def get_dtheta_diff(self):
-        #~10% of 1 sigma
+        #~10% of 1 sigma for numerical derivative
         theta_dict=self.param_dict
-        errors_LCDM_planck2015={'h':0.0096, 'omega_b':0.00023, 'omega_cdm': 0.0022,
+        if self.year==2015:
+            errors_LCDM_planck={'h':0.0096, 'omega_b':0.00023, 'omega_cdm': 0.0022,
                     'tau_reio': 0.019, 'A_s': np.exp(0.036)/1e10, 'n_s': 0.0062,
+                    'alpha_s': 0.016}   #dns/dlnk=n_run
+        elif self.year==2018:
+            errors_LCDM_planck={'h':0.005, 'omega_b':0.0001, 'omega_cdm': 0.001,
+                    'tau_reio': 0.007, 'A_s': np.exp(0.016)/1e10, 'n_s': 0.004,
                     'alpha_s': 0.016}   #dns/dlnk=n_run
         dtheta_diff={}
         for p in self.ordered_param_names:
             try:
                 print(p+': setting h=0.1 sigma for numerical derivative')
-                dtheta_diff[p]=0.1*errors_LCDM_planck2015[p]
+                dtheta_diff[p]=0.1*errors_LCDM_planck[p]
                 # print('setting h=5% of parameter')
                 # dtheta_diff[p]=0.05*theta_dict[p]
             except:
